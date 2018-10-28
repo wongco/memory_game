@@ -164,7 +164,7 @@ var game = {
     // Event Listener for cards
     gameContainer.addEventListener('click', function clickCards(event) {
       if (event.target.className === 'card') {
-        game.activateTurn(event.target.id);
+        handlers.activateTurn(event.target.id);
       }
     });
   },
@@ -173,54 +173,48 @@ var game = {
     return (
       this.gameGrid[cardId1].matchValue === this.gameGrid[cardId2].matchValue
     );
-  },
-  // Runs a turn with the the selected card's id being passed as argument
-  activateTurn: function(id) {
-    // check that matchedStatus is false and that item is not currently in matchQueue
-    if (
-      this.gameGrid[id].matchedStatus === false &&
-      this.matchQueue.indexOf(id) === -1
-    ) {
-      this.increaseClickCount();
-      this.flipCard(id); // flip the card
-      this.matchQueue.push(id); // push item into matching Queue
-      // check if queue is full
-      if (this.matchQueue.length === 2) {
-        // matching Queue has 2 items. Process.
-        this.processQueue();
-      }
-    }
+  }
+};
 
-    if (this.totalFound === this.rows * this.cols) {
-      console.log('Game Over: All pairs found!');
-      // send Message to Dom and End Game
-    }
-    // game.displayToConsole();
-  },
+// HTML Handlers
+var handlers = {
   increaseClickCount: function() {
-    this.totalClickCount++; // increase total click count
+    game.totalClickCount++;
     var totalClickCountElement = document.getElementById('clicksContainer')
       .children[0];
-    totalClickCountElement.innerText = `Total Clicks: ${this.totalClickCount}`;
+    totalClickCountElement.innerText = `Total Clicks: ${game.totalClickCount}`;
   },
-  // Flips the Card (Boolean)
+  increaseFoundTotal: function() {
+    game.totalFound += 2;
+    var totalFoundElement = document.getElementById('foundContainer')
+      .children[0];
+    totalFoundElement.innerText = `Total Found: ${game.totalFound}`;
+  },
   flipCard: function(id) {
-    var card = document.getElementById(id);
-    if (this.gameGrid[id].isFlipped === true) {
-      card.innerText = this.coverLetter;
+    var cardElement = document.getElementById(id);
+    var card = game.gameGrid[id];
+    if (card.isFlipped === true) {
+      cardElement.innerText = game.coverLetter;
     } else {
-      card.innerText = this.valueArray[this.gameGrid[id].matchValue];
+      cardElement.innerText = game.valueArray[card.matchValue];
     }
-    this.gameGrid[id].isFlipped = !this.gameGrid[id].isFlipped;
+    game.gameGrid[id].isFlipped = !game.gameGrid[id].isFlipped;
   },
-  // Checks if the 2 Items selected are matching or need to be reset.
+  addToMatchQueue: function(id) {
+    game.matchQueue.push(id);
+    // check if queue is full
+    if (game.matchQueue.length === 2) {
+      // matching Queue has 2 items. Process.
+      this.processQueue();
+    }
+  },
   processQueue: function() {
-    var card1ID = this.matchQueue[0];
-    var card2ID = this.matchQueue[1];
-    if (this.areCardsMatching(card1ID, card2ID)) {
+    var card1ID = game.matchQueue[0];
+    var card2ID = game.matchQueue[1];
+    if (game.areCardsMatching(card1ID, card2ID)) {
       this.increaseFoundTotal();
-      this.gameGrid[card1ID].matchedStatus = true;
-      this.gameGrid[card2ID].matchedStatus = true;
+      game.gameGrid[card1ID].matchedStatus = true;
+      game.gameGrid[card2ID].matchedStatus = true;
     } else {
       setTimeout(
         function() {
@@ -230,12 +224,23 @@ var game = {
         1000
       );
     }
-    this.matchQueue = [];
+    game.matchQueue = [];
   },
-  increaseFoundTotal: function() {
-    this.totalFound += 2;
-    var totalFoundElement = document.getElementById('foundContainer')
-      .children[0];
-    totalFoundElement.innerText = `Total Found: ${this.totalFound}`;
+  // Runs a turn with the the selected card's id being passed as argument
+  activateTurn: function(id) {
+    // check that matchedStatus is false and that item is not currently in matchQueue
+    if (
+      game.gameGrid[id].matchedStatus === false &&
+      game.matchQueue.indexOf(id) === -1
+    ) {
+      this.increaseClickCount();
+      this.flipCard(id); // flip the card
+      this.addToMatchQueue(id); // push item into matching Queue
+    }
+
+    if (game.totalFound === game.rows * game.cols) {
+      console.log('Game Over: All pairs found!');
+      // send Message to Dom and End Game
+    }
   }
 };

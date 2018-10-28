@@ -323,15 +323,12 @@ var view = {
     var gameContainer = document.getElementById('gameContainer');
     var completeElement = document.createElement('div');
     completeElement.classList.add('completeElement');
-    if (lowScore != undefined) {
-      if (game.totalClickCount < lowScore) {
-        localStorage.setItem('lowScore', game.totalClickCount);
-        completeElement.innerText =
-          "Congratulations! You've set a new low score!";
-      } else {
-        completeElement.innerText =
-          "Congratulations! You've completed the game!";
-      }
+    if (lowScore != undefined || game.totalClickCount < lowScore) {
+      localStorage.setItem('lowScore', game.totalClickCount);
+      completeElement.innerText =
+        "Congratulations! You've set a new low score!";
+    } else {
+      completeElement.innerText = "Congratulations! You've completed the game!";
     }
     gameContainer.appendChild(completeElement);
 

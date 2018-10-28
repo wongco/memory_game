@@ -50,10 +50,14 @@ var landingView = {
       "I'm sorry, Dave. I'm afraid I can't let you leave without playing.";
     main.appendChild(newElement);
 
-    newElement = document.createElement('button');
-    newElement.classList.add('button--main');
-    newElement.innerText = 'Play Game';
+    newElement = document.createElement('div');
+    var newButton = document.createElement('button');
+    newButton.classList.add('button--main');
+    newButton.innerText = 'Play Game';
+    newElement.appendChild(newButton);
+
     main.appendChild(newElement);
+
     this.setUpLandingEventListeners();
 
     var lowScore = localStorage.getItem('lowScore');
@@ -171,13 +175,8 @@ var handlers = {
     totalFoundElement.innerText = `Total Found: ${game.totalFound}`;
   },
   flipCard: function(id) {
-    var cardElement = document.getElementById(id);
-    var card = game.gameGrid[id];
-    if (card.isFlipped === true) {
-      cardElement.innerText = game.coverLetter;
-    } else {
-      cardElement.innerText = game.valueArray[card.matchValue];
-    }
+    var card = document.getElementById(id);
+    card.classList.toggle('is-flipped');
     game.gameGrid[id].isFlipped = !game.gameGrid[id].isFlipped;
   },
   addToMatchQueue: function(id) {
@@ -286,11 +285,27 @@ var view = {
       var cardRowContainer = document.createElement('div');
       cardRowContainer.classList.add('cardRowContainer');
       for (var j = 0; j < game.cols; j++) {
+        var cardContainer = document.createElement('div');
+        cardContainer.classList.add('card__container');
+
         var card = document.createElement('div');
         card.classList.add('card');
         card.setAttribute('id', game.gameGrid[count].id);
-        card.innerText = game.coverLetter;
-        cardRowContainer.appendChild(card);
+
+        var cardfaceFront = document.createElement('div');
+        cardfaceFront.classList.add('card__face', 'card__face--front');
+        cardfaceFront.innerText = game.coverLetter;
+        card.appendChild(cardfaceFront);
+
+        var cardfaceBack = document.createElement('div');
+        cardfaceBack.classList.add('card__face', 'card__face--back');
+        var matchValue = game.gameGrid[count].matchValue;
+        cardfaceBack.innerText = game.valueArray[matchValue];
+        card.appendChild(cardfaceBack);
+
+        cardContainer.appendChild(card);
+        cardRowContainer.appendChild(cardContainer);
+
         count++;
       }
       gameContainer.appendChild(cardRowContainer);
@@ -303,8 +318,9 @@ var view = {
     foundContainer.appendChild(foundElement);
   },
   clickCards: function(event) {
-    if (event.target.className === 'card') {
-      handlers.activateTurn(event.target.id);
+    // Adjust Code to Bubble Up so that card execute
+    if (event.target.parentElement.className === 'card') {
+      handlers.activateTurn(event.target.parentElement.id);
     }
   },
   setUpGameEventListeners: function() {

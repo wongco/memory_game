@@ -323,7 +323,7 @@ var view = {
     var gameContainer = document.getElementById('gameContainer');
     var completeElement = document.createElement('div');
     completeElement.classList.add('completeElement');
-    if (lowScore != undefined || game.totalClickCount < lowScore) {
+    if (lowScore === null || game.totalClickCount < lowScore) {
       localStorage.setItem('lowScore', game.totalClickCount);
       completeElement.innerText =
         "Congratulations! You've set a new low score!";

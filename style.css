@@ -1,34 +1,110 @@
-body {
-  /* font-family: 'Press Start 2P', cursive; */
-  background: -moz-linear-gradient(top, rgba(180,227,145,1) 0%, rgba(97,196,25,1) 50%, rgba(180,227,145,1) 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(top, rgba(180,227,145,1) 0%,rgba(97,196,25,1) 50%,rgba(180,227,145,1) 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(to bottom, rgba(180,227,145,1) 0%,rgba(97,196,25,1) 50%,rgba(180,227,145,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+.body-start {
+  font-family: sans-serif;
+  background-color: rgb(51, 106, 131);
+}
+
+.body-game {
+  /* font-family: 'VT323', monospace; */
+  background: -moz-linear-gradient(
+    top,
+    rgba(180, 227, 145, 1) 0%,
+    rgba(97, 196, 25, 1) 50%,
+    rgba(180, 227, 145, 1) 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    rgba(180, 227, 145, 1) 0%,
+    rgba(97, 196, 25, 1) 50%,
+    rgba(180, 227, 145, 1) 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    rgba(180, 227, 145, 1) 0%,
+    rgba(97, 196, 25, 1) 50%,
+    rgba(180, 227, 145, 1) 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
 h1 {
   text-align: center;
 }
-.main {
+
+/*-------------------
+----Landing CSS----
+--------------------*/
+
+.main-start {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  height: 500px;
+  width: 99%;
+}
+
+.header--main {
+  font-size: 4em;
+  font-family: 'VT323', monospace;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+  width: 60%;
+}
+
+.button--main,
+.button--leave {
+  font-size: 2em;
+  align-self: center;
+  padding: 0.5em;
+  border: 0.1em solid black;
+  border-radius: 10px;
+  background-color: teal;
+  outline: none;
+  margin-top: 20px;
+}
+
+.button--main:hover,
+.button--leave:hover {
+  background-color: rgb(3, 203, 203);
+}
+
+.div--score {
+  font-size: 3em;
+  font-family: 'VT323', monospace;
+  display: flex;
+  align-self: center;
+  justify-self: center;
+  text-align: center;
+}
+
+/*-------------------
+----Main Game CSS----
+--------------------*/
+
+.main-game {
   display: flex;
   flex-direction: row;
   justify-content: space-bewteen;
   width: 100%;
 }
 
-.clicksContainer {
+.clicksContainer,
+.foundContainer {
+  font-family: 'VT323', monospace;
   width: 15%;
-  /* background-color: teal; */
   display: flex;
+  font-size: 2.5em;
   justify-content: center;
   align-items: center;
 }
 
-.foundContainer {
-  width: 15%;
-  /* background-color: orange; */
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.clicksContainer div,
+.foundContainer div {
+  width: 70%;
+  background-color: gray;
+  text-align: center;
+  padding: 20px;
+  border: 5px solid black;
 }
 
 .gameContainer {
@@ -44,7 +120,7 @@ h1 {
 }
 
 .card {
-  width: 100px;
+  width: 125px;
   height: 125px;
   border: 5px solid gray;
   border-radius: 10px;
@@ -67,5 +143,12 @@ h1 {
     to bottom,
     rgba(167, 207, 223, 1) 0%,
     rgba(35, 83, 138, 1) 100%
-  ); W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+.completeElement {
+  font-family: 'VT323', monospace;
+  display: flex;
+  justify-content: center;
+  font-size: 3em;
 }

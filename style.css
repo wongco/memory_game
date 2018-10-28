@@ -1,3 +1,71 @@
 body {
   /* font-family: 'Press Start 2P', cursive; */
+  background: -moz-linear-gradient(top, rgba(180,227,145,1) 0%, rgba(97,196,25,1) 50%, rgba(180,227,145,1) 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(top, rgba(180,227,145,1) 0%,rgba(97,196,25,1) 50%,rgba(180,227,145,1) 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(to bottom, rgba(180,227,145,1) 0%,rgba(97,196,25,1) 50%,rgba(180,227,145,1) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+h1 {
+  text-align: center;
+}
+.main {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-bewteen;
+  width: 100%;
+}
+
+.clicksContainer {
+  width: 15%;
+  /* background-color: teal; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.foundContainer {
+  width: 15%;
+  /* background-color: orange; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.gameContainer {
+  display: flex;
+  flex-direction: column;
+  width: 70%;
+}
+
+.cardRowContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.card {
+  width: 100px;
+  height: 125px;
+  border: 5px solid gray;
+  border-radius: 10px;
+  margin: 15px 0;
+  font-size: 4em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: -moz-linear-gradient(
+    top,
+    rgba(167, 207, 223, 1) 0%,
+    rgba(35, 83, 138, 1) 100%
+  ); /* FF3.6-15 */
+  background: -webkit-linear-gradient(
+    top,
+    rgba(167, 207, 223, 1) 0%,
+    rgba(35, 83, 138, 1) 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(
+    to bottom,
+    rgba(167, 207, 223, 1) 0%,
+    rgba(35, 83, 138, 1) 100%
+  ); W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+
 }

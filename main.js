@@ -29,14 +29,11 @@
 //     save score to LocalStorage
 
 document.addEventListener('DOMContentLoaded', function() {
-  var gameContainer = document.getElementById('game');
-  gameContainer.addEventListener('click', function(event) {
-    console.log(event);
-    // find element being targeted
-    // send command to game.activateTurn(id);
-  });
+  game.createGameGrid(4); // Default game is 4 rows x 5 cols;
+  game.displayToWindow();
 });
 
+// Game Object and Methods
 var game = {
   gameGrid: [],
   matchQueue: [],
@@ -44,15 +41,32 @@ var game = {
   cols: 5,
   totalClickCount: 0,
   totalFound: 0,
-  // Generate Grid for Game
-  createGameGrid: function(rows, cols) {
+  coverLetter: '🀄',
+  valueArray: [
+    '🍅',
+    '🍆',
+    '🍇',
+    '🍉',
+    '🍊',
+    '🍌',
+    '🍍',
+    '🍎',
+    '🍏',
+    '🍑',
+    '🍔',
+    '🍕',
+    '🍖',
+    '🍗',
+    '🍦'
+  ],
+  // Generate Grid for Game. If arguments are not passed default values are used to choose size
+  createGameGrid: function(rows) {
     try {
       // if rows * cols is not even number, throw error
-      if ((rows * cols) % 2 === 1) {
+      if ((rows * this.cols) % 2 === 1) {
         throw 'Total cards is an odd number!';
       }
       this.rows = rows;
-      this.cols = cols;
       var matchValues = this.createMatchValues(this.rows * this.cols);
       var id = 0;
       for (var i = 0; i < this.rows * this.cols; i++) {
@@ -69,7 +83,7 @@ var game = {
       console.log(error, 'Rows * Columns need to be an even number');
     }
   },
-  // Create Reference Values for Game
+  // Create Reference Values for Game - Used to generate a range array with 2 of each number
   createMatchValues: function(totalValues) {
     var result = [];
     for (var i = 0; i < totalValues / 2; i++) {
@@ -77,7 +91,7 @@ var game = {
     }
     return result.concat(result);
   },
-  // Debug Display for Console
+  // Debug Display for Console - Diagnostic Use Only
   displayToConsole: function() {
     var count = 0;
     for (var i = 0; i < this.rows; i++) {
@@ -95,18 +109,79 @@ var game = {
     console.log(`Total click count: ${this.totalClickCount}`);
     console.log(`Total found count: ${this.totalFound}`);
   },
+  // Display Grid to Window
+  displayToWindow: function() {
+    var mainContainer = document.getElementById('main');
+    mainContainer.innerText = ''; // Empty Main Contents
+
+    // create clicksContainer
+    var newSection = document.createElement('section');
+    newSection.classList.add('clicksContainer');
+    newSection.setAttribute('id', 'clicksContainer');
+    mainContainer.appendChild(newSection);
+
+    // create gameContainer
+    newSection = document.createElement('section');
+    newSection.classList.add('gameContainer');
+    newSection.setAttribute('id', 'gameContainer');
+    mainContainer.appendChild(newSection);
+
+    // create foundContainer
+    newSection = document.createElement('section');
+    newSection.classList.add('foundContainer');
+    newSection.setAttribute('id', 'foundContainer');
+    mainContainer.appendChild(newSection);
+
+    // add content to clicksContainer - Clicks so Far
+    var clicksContainer = document.getElementById('clicksContainer');
+    var counterElement = document.createElement('div');
+    counterElement.innerText = `Total Clicks: ${this.totalClickCount}`;
+    clicksContainer.appendChild(counterElement);
+
+    // add content to gamesContainer - Game Content
+    var count = 0;
+    var gameContainer = document.getElementById('gameContainer');
+    for (var i = 0; i < this.rows; i++) {
+      var cardRowContainer = document.createElement('div');
+      cardRowContainer.classList.add('cardRowContainer');
+      for (var j = 0; j < this.cols; j++) {
+        var card = document.createElement('div');
+        card.classList.add('card');
+        card.setAttribute('id', this.gameGrid[count].id);
+        card.innerText = this.coverLetter;
+        cardRowContainer.appendChild(card);
+        count++;
+      }
+      gameContainer.appendChild(cardRowContainer);
+    }
+
+    // add content to foundContainer - Pairs Found
+    var foundContainer = document.getElementById('foundContainer');
+    var foundElement = document.createElement('div');
+    foundElement.innerText = `Total Found: ${this.totalFound}`;
+    foundContainer.appendChild(foundElement);
+
+    // Event Listener for cards
+    gameContainer.addEventListener('click', function clickCards(event) {
+      if (event.target.className === 'card') {
+        game.activateTurn(event.target.id);
+      }
+    });
+  },
+  // checks if the two cards are matching & returns boolean
   areCardsMatching: function(cardId1, cardId2) {
     return (
       this.gameGrid[cardId1].matchValue === this.gameGrid[cardId2].matchValue
     );
   },
+  // Runs a turn with the the selected card's id being passed as argument
   activateTurn: function(id) {
     // check that matchedStatus is false and that item is not currently in matchQueue
     if (
       this.gameGrid[id].matchedStatus === false &&
       this.matchQueue.indexOf(id) === -1
     ) {
-      this.totalClickCount++; // increase total click count
+      this.increaseClickCount();
       this.flipCard(id); // flip the card
       this.matchQueue.push(id); // push item into matching Queue
       // check if queue is full
@@ -118,10 +193,24 @@ var game = {
 
     if (this.totalFound === this.rows * this.cols) {
       console.log('Game Over: All pairs found!');
+      // send Message to Dom and End Game
     }
-    game.displayToConsole();
+    // game.displayToConsole();
   },
+  increaseClickCount: function() {
+    this.totalClickCount++; // increase total click count
+    var totalClickCountElement = document.getElementById('clicksContainer')
+      .children[0];
+    totalClickCountElement.innerText = `Total Clicks: ${this.totalClickCount}`;
+  },
+  // Flips the Card (Boolean)
   flipCard: function(id) {
+    var card = document.getElementById(id);
+    if (this.gameGrid[id].isFlipped === true) {
+      card.innerText = this.coverLetter;
+    } else {
+      card.innerText = this.valueArray[this.gameGrid[id].matchValue];
+    }
     this.gameGrid[id].isFlipped = !this.gameGrid[id].isFlipped;
   },
   // Checks if the 2 Items selected are matching or need to be reset.
@@ -129,16 +218,24 @@ var game = {
     var card1ID = this.matchQueue[0];
     var card2ID = this.matchQueue[1];
     if (this.areCardsMatching(card1ID, card2ID)) {
-      this.totalFound += 2;
+      this.increaseFoundTotal();
       this.gameGrid[card1ID].matchedStatus = true;
       this.gameGrid[card2ID].matchedStatus = true;
     } else {
-      this.flipCard(card1ID);
-      this.flipCard(card2ID);
+      setTimeout(
+        function() {
+          this.flipCard(card1ID);
+          this.flipCard(card2ID);
+        }.bind(this),
+        1000
+      );
     }
     this.matchQueue = [];
+  },
+  increaseFoundTotal: function() {
+    this.totalFound += 2;
+    var totalFoundElement = document.getElementById('foundContainer')
+      .children[0];
+    totalFoundElement.innerText = `Total Found: ${this.totalFound}`;
   }
 };
-
-game.createGameGrid(2, 2); // Default game is 4 rows x 5 cols;
-game.displayToConsole();

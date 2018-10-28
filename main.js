@@ -68,7 +68,7 @@ var landingView = {
   },
   clickButton: function(event) {
     if (event.target.className === 'button--main') {
-      startGame();
+      view.startGame();
     }
   },
   setUpLandingEventListeners: function() {
@@ -349,12 +349,11 @@ var view = {
         landingView.start();
       }
     }
+  },
+  startGame: function() {
+    landingView.removeLandingEventListeners();
+    game.createGameGrid(); // Default game is 4 rows x 5 cols;
+    this.displayGameToWindow();
+    this.setUpGameEventListeners();
   }
 };
-
-function startGame() {
-  landingView.removeLandingEventListeners();
-  game.createGameGrid(); // Default game is 4 rows x 5 cols;
-  view.displayGameToWindow();
-  view.setUpGameEventListeners();
-}

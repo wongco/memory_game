@@ -133,14 +133,17 @@ h1 {
   width: 125px;
   height: 125px;
   margin: 15px 0;
+  -webkit-perspective: 600px;
   perspective: 600px;
 }
 
 .card {
   width: 100%;
   height: 100%;
-  transition: transform 1s;
+  -webkit-transform-style: preserve-3d;
+  -webkit-transition: -webkit-transform 1s;
   transform-style: preserve-3d;
+  transition: transform 1s;
   cursor: pointer;
   position: relative;
 }
@@ -161,6 +164,7 @@ h1 {
   width: 100%;
   height: 100%;
   text-align: center;
+  -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
 }
 

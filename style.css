@@ -77,9 +77,6 @@ h1 {
   background-color: rgb(3, 203, 203);
 }
 
-.button--main {
-}
-
 .div--score {
   font-size: 3em;
   font-family: 'VT323', monospace;
@@ -149,6 +146,7 @@ h1 {
 }
 
 .card.is-flipped {
+  -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
 }
 
@@ -185,6 +183,7 @@ h1 {
 }
 
 .card__face--back {
+  -webkit-transform: rotateY(180deg);
   transform: rotateY(180deg);
   background: -moz-linear-gradient(
     top,
